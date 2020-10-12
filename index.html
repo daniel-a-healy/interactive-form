@@ -27,7 +27,7 @@
         <input type="email" id="mail" name="user-email">
         
         <label for="title">Job Role</label>
-        <select id="title" name="user-title">
+        <select id="title" name="user-title" onchange="showHideOtherTitle()">
           <option value="full-stack js developer">Full Stack JavaScript Developer</option>
           <option value="front-end developer">Front End Developer</option>
           <option value="back-end developer">Back End Developer</option>
@@ -36,6 +36,9 @@
           <option value="other">Other</option>  
         </select>           
       </fieldset>
+
+      <label for="other-title" id="other-label">Other Title:</label>
+      <input type="text" id="other-title" name="other-title" placeholder="Enter your job title here">
       
       <fieldset class="shirt">
         <legend>T-Shirt Info</legend>
