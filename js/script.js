@@ -7,11 +7,13 @@ function showHideOtherTitle(){
 
     // if other is selected, display the other job role input field, otherwise, hide the field and label
     if (titleSelect.value === "other"){
-        otherInput.style.display = "block";
-        otherLabel.style.display = "block";
+        otherLabel.style.display = "block"; // shows label
+        otherInput.style.display = "block"; // shows input
     }else{
-        otherInput.style.display = "none";
-        otherLabel.style.display = "none";
+        otherInput.value = ""; // clears any leftover data that may have been input before the hide was triggered
+
+        otherLabel.style.display = "none"; // hides label
+        otherInput.style.display = "none"; // hides input      
     }
 
 }
