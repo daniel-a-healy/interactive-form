@@ -20,45 +20,32 @@ function showHideOtherTitle(){
 
 function processThemeChange() {
     const designSelect = document.getElementById("design");
-    const colors = document.getElementById("color").children;
-    const jsPunsColors = ["cornflowerblue", "darkslategrey", "gold"];
-    const heartJSColors = ["tomato", "steelblue", "dimgrey"];
-
-    if (designSelect.value === "select-theme") {
-        showColors(colors, colors);
-
-        document.getElementById("color-error").style = "block";
-
-    } else {
-        if (designSelect.value === "js puns") {
-            showColors(colors, jsPunsColors);
-        }else if (designSelect.value === "heart js") {
-            showColors(colors, heartJSColors);
-        }
-    }
+    const optionsToShow = document.getElementsByClassName(designSelect.value);
+    showColorOptions(optionsToShow);
 }
 
-function showColors(colors, themeColors){
-    
-    outerloop:
-    for (let i = 0; i < colors.length; i++) {
+function showColorOptions(themeColors){
+    const allColors = document.getElementById("color").children;
+
+    for (let i = 0; i < allColors.length; i++) {
         let matchFound = false;
 
         innerloop:
         for (let j = 0; j < themeColors.length; j++) {
-            if (colors[i].value === themeColors[j]) {
-                colors[i].style.display = "block";
+            if (allColors[i].value === themeColors[j].value) {
                 matchFound = true;
+                allColors[i].style.display = "block";
                 break innerloop;
             }
         }
 
         if (matchFound === false) {
-            colors[i].style.display = "none";
+            allColors[i].style.display = "none";
         }
-
-        
     }
+
+    const colorDropDown = document.getElementById("color");
+    colorDropDown.value = themeColors[0].value;
 }
 
 showHideOtherTitle(); // hide the other job role field on page load
