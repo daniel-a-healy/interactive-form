@@ -67,6 +67,9 @@ processThemeChange(); // hide colors on
 const checkboxes = document.querySelectorAll("#activities input");
 let total = 0;
 
+document.getElementById("paypal").setAttribute("hidden", "true");
+document.getElementById("bitcoin").setAttribute("hidden", "true");
+
 document.getElementById("activities").addEventListener("change", (event) => {
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
     const clickedEventName  = event.target.getAttribute("name");
