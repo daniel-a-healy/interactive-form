@@ -48,5 +48,61 @@ function showColorOptions(themeColors){
     colorDropDown.value = themeColors[0].value;
 }
 
+function disableCheckBox(checkboxElement) {
+    checkboxElement.disabled = true;
+}
+
+function enableCheckBox(checkboxElement) {
+    checkboxElement.disabled = false;
+}
+
+function updateTotal(total) {
+    const totalElement = document.getElementById("total");
+    totalElement.innerHTML = `Total: $${total}`;
+}
+
 showHideOtherTitle(); // hide the other job role field on page load
 processThemeChange(); // hide colors on 
+
+const checkboxes = document.querySelectorAll("#activities input");
+let total = 0;
+
+document.getElementById("activities").addEventListener("change", (event) => {
+    const clickedEventTime = event.target.getAttribute("data-day-and-time");
+    const clickedEventName = event.target.getAttribute("name");
+    const clickEventPrice = Number(event.target.getAttribute("data-cost"));
+    const clickEventChecked = event.target.checked;
+    
+    if (clickEventChecked) {
+        total += clickEventPrice;
+    } else {
+        total -= clickEventPrice;
+    }
+
+    updateTotal(total);
+
+    for (let i = 0; i < checkboxes.length; i++) {
+        const currentCheckboxTime = checkboxes[i].getAttribute("data-day-and-time");
+        const currentCheckboxName = checkboxes[i].getAttribute("name");
+
+        if (currentCheckboxTime === "null" ) {
+            continue;
+        }
+
+        if (clickedEventTime === currentCheckboxTime) {
+            if (clickedEventName === currentCheckboxName) {
+                continue;
+            } else {
+                if (clickEventChecked) {
+                    disableCheckBox(checkboxes[i]);
+                    
+                }else {
+                    enableCheckBox(checkboxes[i]);
+                }
+            }
+        }
+        
+    }
+
+    
+});
