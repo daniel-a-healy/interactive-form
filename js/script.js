@@ -21,6 +21,12 @@ function showHideOtherTitle(){
 function processThemeChange() {
     const designSelect = document.getElementById("design");
     const optionsToShow = document.getElementsByClassName(designSelect.value);
+
+    if (designSelect.value !== "select-theme") {
+        document.getElementById("shirt-colors").style.display = "block";
+    } else {
+        document.getElementById("shirt-colors").style.display = "none";
+    }
     showColorOptions(optionsToShow);
 }
 
@@ -67,8 +73,9 @@ processThemeChange(); // hide colors on
 const checkboxes = document.querySelectorAll("#activities input");
 let total = 0;
 
-document.getElementById("paypal").setAttribute("hidden", "true");
-document.getElementById("bitcoin").setAttribute("hidden", "true");
+document.getElementById("paypal").style.display = "none";
+document.getElementById("bitcoin").style.display = "none";
+document.getElementById("shirt-colors").style.display = "none";
 
 document.getElementById("activities").addEventListener("change", (event) => {
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
@@ -112,4 +119,8 @@ document.getElementById("activities").addEventListener("change", (event) => {
         }
         
     }    
+});
+
+document.getElementById("payment").addEventListener("change", (event) => {
+
 });
