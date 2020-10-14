@@ -122,5 +122,15 @@ document.getElementById("activities").addEventListener("change", (event) => {
 });
 
 document.getElementById("payment").addEventListener("change", (event) => {
+    const eventChangeValue = event.target.value;
+    const paymentMethods = ["credit card", "paypal", "bitcoin"];
+
+    for (let i = 0; i < paymentMethods.length; i++) {
+        if (eventChangeValue === paymentMethods[i]) {
+            document.getElementById(paymentMethods[i]).style.display = "block";
+        } else {
+            document.getElementById(paymentMethods[i]).style.display = "none";
+        }
+    }
 
 });
