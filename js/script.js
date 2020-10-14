@@ -68,9 +68,9 @@ const checkboxes = document.querySelectorAll("#activities input");
 let total = 0;
 
 document.getElementById("activities").addEventListener("change", (event) => {
-    const clickedEventTime = event.target.getAttribute("data-day-and-time");
-    const clickedEventName = event.target.getAttribute("name");
-    const clickEventPrice = Number(event.target.getAttribute("data-cost"));
+    const clickedEventTime  = event.target.getAttribute("data-day-and-time");
+    const clickedEventName  = event.target.getAttribute("name");
+    const clickEventPrice   = Number(event.target.getAttribute("data-cost"));
     const clickEventChecked = event.target.checked;
     
     if (clickEventChecked) {
@@ -82,8 +82,10 @@ document.getElementById("activities").addEventListener("change", (event) => {
     updateTotal(total);
 
     for (let i = 0; i < checkboxes.length; i++) {
-        const currentCheckboxTime = checkboxes[i].getAttribute("data-day-and-time");
-        const currentCheckboxName = checkboxes[i].getAttribute("name");
+        const currentCheckbox = checkboxes[i];
+        const currentCheckboxTime = currentCheckbox.getAttribute("data-day-and-time");
+        const currentCheckboxName = currentCheckbox.getAttribute("name");
+        const currentCheckboxLabel = currentCheckbox.parentElement;
 
         if (currentCheckboxTime === "null" ) {
             continue;
@@ -94,15 +96,17 @@ document.getElementById("activities").addEventListener("change", (event) => {
                 continue;
             } else {
                 if (clickEventChecked) {
-                    disableCheckBox(checkboxes[i]);
-                    
+                    disableCheckBox(currentCheckbox);
+                    currentCheckboxLabel.style.color = "red";
+                    currentCheckboxLabel.style.textDecoration = "line-through";   
                 }else {
-                    enableCheckBox(checkboxes[i]);
+                    enableCheckBox(currentCheckbox);
+                    console.log(currentCheckboxLabel);
+                    currentCheckboxLabel.style.color = "black";  
+                    currentCheckboxLabel.style.textDecoration = "none";   
                 }
             }
         }
         
-    }
-
-    
+    }    
 });
