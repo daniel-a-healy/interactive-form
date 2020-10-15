@@ -72,6 +72,8 @@ function validateForm() {
     const emailInput = document.getElementById("mail").value;
     const submitButton = document.getElementById("submit");
     const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i");
+    const eventChangeValue = document.getElementById("payment").value;
+
 
     let errorFound = false;
 
@@ -98,7 +100,32 @@ function validateForm() {
         console.log("At least one checkbox must be checked.");
     }
 
+    if (eventChangeValue === "credit card"){
+        const ccNum = document.getElementById("cc-num").value;
+        const zipCode = document.getElementById("zip").value;
+        const cvv = document.getElementById("cvv").value;
 
+        if (ccNum.length >= 13 && ccNum.length <= 16) {
+            console.log("Valid credit number length entered.");
+        } else {
+            errorFound = true;
+            console.log("Please enter a credit card number between 13 and 16 digits.");
+        }
+
+        if (zipCode.length === 5) {
+            console.log("Valid zip code entered.");
+        } else {
+            errorFound = true;
+            console.log("Please enter a 5 digit ZIP code.");
+        }
+
+        if (cvv.length === 3) {
+            console.log("Valid CVV code entered.");
+        } else {
+            errorFound = true;
+            console.log("Please enter a valid 3 digit CVV code.");
+        }
+    }
 
     if (errorFound) {
         submitButton.disabled = true;
@@ -118,7 +145,16 @@ function checkForSelectedCheckbox() {
     return false;
 }
 
+function addKeyupListeners(keyupFields) {
+    for (let i = 0; i < keyupFields.length; i++) {
+        document.getElementById(keyupFields[i]).addEventListener("keyup", () => {
+            validateForm();
+        });
+    }
+}
+
 const checkboxes = document.querySelectorAll("#activities input");
+const keyupFields = ["name", "mail", "cc-num", "zip", "cvv"];
 let total = 0;
 
 document.getElementById("paypal").style.display = "none";
@@ -127,7 +163,7 @@ document.getElementById("shirt-colors").style.display = "none";
 
 showHideOtherTitle(); // hide the other job role field on page load
 processThemeChange(); // hide colors on 
-validateForm(); // validates form on page load
+addKeyupListeners(keyupFields); // validates form on page load
 
 document.getElementById("activities").addEventListener("change", (event) => {
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
@@ -179,6 +215,8 @@ document.getElementById("payment").addEventListener("change", (event) => {
     const eventChangeValue = event.target.value;
     const paymentMethods = ["credit card", "paypal", "bitcoin"];
 
+    validateForm();
+
     for (let i = 0; i < paymentMethods.length; i++) {
         if (eventChangeValue === paymentMethods[i]) {
             document.getElementById(paymentMethods[i]).style.display = "block";
@@ -187,12 +225,4 @@ document.getElementById("payment").addEventListener("change", (event) => {
         }
     }
 
-});
-
-document.getElementById("name").addEventListener("keyup", () => {
-    validateForm();
-});
-
-document.getElementById("mail").addEventListener("keyup", () => {
-    validateForm();
 });
