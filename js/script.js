@@ -74,6 +74,7 @@ function validateForm() {
     const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i");
     const eventChangeValue = document.getElementById("payment").value;
     const errorMessages = document.querySelectorAll(".validation-err");
+    
 
     let errorFound = false;
 
@@ -98,10 +99,10 @@ function validateForm() {
     const selectedCheckboxPresent = checkForSelectedCheckbox();
 
     if (selectedCheckboxPresent){
-        console.log("Checkboxes validated.")
+        errorMessages[2].style.display = "none";
     } else {
         errorFound = true;
-        console.log("At least one checkbox must be checked.");
+        errorMessages[2].style.display = "block";
     }
 
     if (eventChangeValue === "credit card"){
@@ -110,25 +111,29 @@ function validateForm() {
         const cvv = document.getElementById("cvv").value;
 
         if (ccNum.length >= 13 && ccNum.length <= 16) {
-            console.log("Valid credit number length entered.");
+            document.getElementById("invalid-cc-num").style.display = "none";
         } else {
             errorFound = true;
-            console.log("Please enter a credit card number between 13 and 16 digits.");
+            document.getElementById("invalid-cc-num").style.display = "block";
         }
 
         if (zipCode.length === 5) {
-            console.log("Valid zip code entered.");
+            document.getElementById("invalid-zip").style.display = "none";
         } else {
             errorFound = true;
-            console.log("Please enter a 5 digit ZIP code.");
+            document.getElementById("invalid-zip").style.display = "block";
         }
 
         if (cvv.length === 3) {
-            console.log("Valid CVV code entered.");
+            document.getElementById("invalid-cvv").style.display = "none";
         } else {
             errorFound = true;
-            console.log("Please enter a valid 3 digit CVV code.");
+            document.getElementById("invalid-cvv").style.display = "block";
         }
+    } else {
+        document.getElementById("invalid-cc-num").style.display = "none";
+        document.getElementById("invalid-zip").style.display = "none";
+        document.getElementById("invalid-cvv").style.display = "none";
     }
 
     if (errorFound) {
