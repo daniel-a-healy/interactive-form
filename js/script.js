@@ -68,27 +68,31 @@ function updateTotal(total) {
 }
 
 function validateForm() {
-    const nameInput = document.getElementById("name").value;
-    const emailInput = document.getElementById("mail").value;
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("mail");
     const submitButton = document.getElementById("submit");
     const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i");
     const eventChangeValue = document.getElementById("payment").value;
-
+    const errorMessages = document.querySelectorAll(".validation-err");
 
     let errorFound = false;
 
-    if (nameInput === "") {
-        console.log("Name must be entered");
-        errorFound = true;
+    if (nameInput.value !== "") {
+        errorMessages[0].style.display = "none";
+        nameInput.style.border = "none";
     } else {
-        console.log("Name field validated.");
+        errorFound = true;
+        errorMessages[0].style.display = "block";  
+        nameInput.style.border = "thick solid #FF0000";
     }
 
-    if (emailRegEx.test(emailInput)) {
-        console.log("Valid email address entered");
+    if (emailRegEx.test(emailInput.value)) {
+        errorMessages[1].style.display = "none";
+        emailInput.style.border = "none";
     } else {
         errorFound = true;
-        console.log("You must enter a valid email address.");
+        errorMessages[1].style.display = "block";
+        emailInput.style.border = "thick solid #FF0000";
     }
 
     const selectedCheckboxPresent = checkForSelectedCheckbox();
@@ -164,6 +168,7 @@ document.getElementById("shirt-colors").style.display = "none";
 showHideOtherTitle(); // hide the other job role field on page load
 processThemeChange(); // hide colors on 
 addKeyupListeners(keyupFields); // validates form on page load
+validateForm();
 
 document.getElementById("activities").addEventListener("change", (event) => {
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
