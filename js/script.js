@@ -67,8 +67,56 @@ function updateTotal(total) {
     totalElement.innerHTML = `Total: $${total}`;
 }
 
-showHideOtherTitle(); // hide the other job role field on page load
-processThemeChange(); // hide colors on 
+function validateForm() {
+    const nameInput = document.getElementById("name").value;
+    const emailInput = document.getElementById("mail").value;
+    const submitButton = document.getElementById("submit");
+    const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i");
+
+    let errorFound = false;
+
+    if (nameInput === "") {
+        console.log("Name must be entered");
+        errorFound = true;
+    } else {
+        console.log("Name field validated.");
+    }
+
+    if (emailRegEx.test(emailInput)) {
+        console.log("Valid email address entered");
+    } else {
+        errorFound = true;
+        console.log("You must enter a valid email address.");
+    }
+
+    const selectedCheckboxPresent = checkForSelectedCheckbox();
+
+    if (selectedCheckboxPresent){
+        console.log("Checkboxes validated.")
+    } else {
+        errorFound = true;
+        console.log("At least one checkbox must be checked.");
+    }
+
+
+
+    if (errorFound) {
+        submitButton.disabled = true;
+        submitButton.style.background = "#6F9DDC";
+    } else {
+        submitButton.disabled = false;
+        submitButton.style.background = "#083f57";
+    }
+}
+
+function checkForSelectedCheckbox() {
+    for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked === true) {
+            return true;
+        } 
+    }
+    return false;
+}
 
 const checkboxes = document.querySelectorAll("#activities input");
 let total = 0;
@@ -77,11 +125,17 @@ document.getElementById("paypal").style.display = "none";
 document.getElementById("bitcoin").style.display = "none";
 document.getElementById("shirt-colors").style.display = "none";
 
+showHideOtherTitle(); // hide the other job role field on page load
+processThemeChange(); // hide colors on 
+validateForm(); // validates form on page load
+
 document.getElementById("activities").addEventListener("change", (event) => {
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
     const clickedEventName  = event.target.getAttribute("name");
     const clickEventPrice   = Number(event.target.getAttribute("data-cost"));
     const clickEventChecked = event.target.checked;
+
+    validateForm();
     
     if (clickEventChecked) {
         total += clickEventPrice;
@@ -133,4 +187,12 @@ document.getElementById("payment").addEventListener("change", (event) => {
         }
     }
 
+});
+
+document.getElementById("name").addEventListener("keyup", () => {
+    validateForm();
+});
+
+document.getElementById("mail").addEventListener("keyup", () => {
+    validateForm();
 });
