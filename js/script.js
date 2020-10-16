@@ -109,26 +109,35 @@ function validateForm() {
         const ccNum = document.getElementById("cc-num").value;
         const zipCode = document.getElementById("zip").value;
         const cvv = document.getElementById("cvv").value;
+        const ccNumInput = document.getElementById("cc-num");
+        const zipCodeInput = document.getElementById("zip");
+        const cvvInput = document.getElementById("cvv");
 
         if (ccNum.length >= 13 && ccNum.length <= 16 && !isNaN(Number(ccNum))) {
             document.getElementById("invalid-cc-num").style.display = "none";
+            ccNumInput.style.border = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-cc-num").style.display = "block";
+            ccNumInput.style.border = "thick solid #FF0000";
         }
 
         if (zipCode.length === 5 && !isNaN(Number(zipCode))) {
             document.getElementById("invalid-zip").style.display = "none";
+            zipCodeInput.style.border = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-zip").style.display = "block";
+            zipCodeInput.style.border = "thick solid #FF0000";
         }
 
         if (cvv.length === 3 && !isNaN(Number(cvv))) {
             document.getElementById("invalid-cvv").style.display = "none";
+            cvvInput.style.border = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-cvv").style.display = "block";
+            cvvInput.style.border = "thick solid #FF0000";
         }
 
     } else {
