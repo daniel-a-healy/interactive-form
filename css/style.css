@@ -166,6 +166,10 @@ option {
 	border-radius: 4px;
 }
 
+.validation-err {
+	color: red;
+}
+
 /* ================================= 
   Helper Classes
 ==================================== */

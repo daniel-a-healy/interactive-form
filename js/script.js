@@ -110,26 +110,27 @@ function validateForm() {
         const zipCode = document.getElementById("zip").value;
         const cvv = document.getElementById("cvv").value;
 
-        if (ccNum.length >= 13 && ccNum.length <= 16) {
+        if (ccNum.length >= 13 && ccNum.length <= 16 && !isNaN(Number(ccNum))) {
             document.getElementById("invalid-cc-num").style.display = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-cc-num").style.display = "block";
         }
 
-        if (zipCode.length === 5) {
+        if (zipCode.length === 5 && !isNaN(Number(zipCode))) {
             document.getElementById("invalid-zip").style.display = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-zip").style.display = "block";
         }
 
-        if (cvv.length === 3) {
+        if (cvv.length === 3 && !isNaN(Number(cvv))) {
             document.getElementById("invalid-cvv").style.display = "none";
         } else {
             errorFound = true;
             document.getElementById("invalid-cvv").style.display = "block";
         }
+
     } else {
         document.getElementById("invalid-cc-num").style.display = "none";
         document.getElementById("invalid-zip").style.display = "none";
