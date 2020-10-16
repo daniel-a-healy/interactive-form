@@ -18,21 +18,27 @@ function showHideOtherTitle(){
 
 }
 
+// hides or shows shirt colors drop down based on user selecting a theme, then calls showColorOptions to show the appropriate theme colors
 function processThemeChange() {
-    const designSelect = document.getElementById("design");
+    // gets DOM objects
+    const designSelect = document.getElementById("design"); 
     const optionsToShow = document.getElementsByClassName(designSelect.value);
 
+    // hides color drop down if no theme is selected
     if (designSelect.value !== "select-theme") {
         document.getElementById("shirt-colors").style.display = "block";
     } else {
         document.getElementById("shirt-colors").style.display = "none";
     }
-    showColorOptions(optionsToShow);
+
+    showColorOptions(optionsToShow); // calls function to filter the appropriate colors based on theme selection
 }
 
-function showColorOptions(themeColors){
-    const allColors = document.getElementById("color").children;
 
+function showColorOptions(themeColors){
+    const allColors = document.getElementById("color").children; // gets all colors
+
+    // loops thru all colors, if it matches the theme based on its class, it will display that color in the dropdown, otherwise, it will be hidden.
     for (let i = 0; i < allColors.length; i++) {
         let matchFound = false;
 
@@ -50,33 +56,40 @@ function showColorOptions(themeColors){
         }
     }
 
+    //sets the default selection of the color drop down to the first color listed for its appropriate theme
     const colorDropDown = document.getElementById("color");
     colorDropDown.value = themeColors[0].value;
 }
 
+// disables a checkbox element passed to it
 function disableCheckBox(checkboxElement) {
     checkboxElement.disabled = true;
 }
 
+// enables a checkbox element passed to it
 function enableCheckBox(checkboxElement) {
     checkboxElement.disabled = false;
 }
 
+// updates the HTML element displaying the total cost of attendance to the user
 function updateTotal(total) {
     const totalElement = document.getElementById("total");
     totalElement.innerHTML = `Total: $${total}`;
 }
 
+// validates all fields, styling inputs with error borders and displaying error messages where appropriate
 function validateForm() {
+    // collecting DOM objects
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("mail");
     const submitButton = document.getElementById("submit");
-    const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i");
+    const emailRegEx = new RegExp("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$", "i"); // regular expression for email format matching
     const eventChangeValue = document.getElementById("payment").value;
-    const errorMessages = document.querySelectorAll(".validation-err");
+    const errorMessages = document.querySelectorAll(".validation-err"); // all error messages are in the class "validation-err"
     
 
-    let errorFound = false;
+    let errorFound = false; // assumes no errors found
+
 
     if (nameInput.value !== "") {
         errorMessages[0].style.display = "none";
