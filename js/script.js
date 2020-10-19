@@ -91,6 +91,7 @@ function validateForm() {
     let errorFound = false; // assumes no errors found
 
 
+    //displays error is name field is blank, removes error styling if name is is not blank
     if (nameInput.value !== "") {
         errorMessages[0].style.display = "none";
         nameInput.style.border = "none";
@@ -100,32 +101,50 @@ function validateForm() {
         nameInput.style.border = "thick solid #FF0000";
     }
 
-    if (emailRegEx.test(emailInput.value)) {
+    // if email is blank, display blank email address error
+    if (emailInput.value !== "") {
         errorMessages[1].style.display = "none";
         emailInput.style.border = "none";
-    } else {
+    } else if (emailInput.value === "") {
         errorFound = true;
         errorMessages[1].style.display = "block";
         emailInput.style.border = "thick solid #FF0000";
     }
-
-    const selectedCheckboxPresent = checkForSelectedCheckbox();
-
-    if (selectedCheckboxPresent){
+    
+    // if email is not blank and doesn't match email 
+    if (emailRegEx.test(emailInput.value) && emailInput.value !== "") {
         errorMessages[2].style.display = "none";
-    } else {
+        emailInput.style.border = "none";
+    } else if (!emailRegEx.test(emailInput.value) && emailInput.value !== "") {
         errorFound = true;
         errorMessages[2].style.display = "block";
+        emailInput.style.border = "thick solid #FF0000";
+    }
+    
+
+    
+    // check for at least one activity selected
+    const selectedCheckboxPresent = checkForSelectedCheckbox();
+
+    // if check for checkbox fails, display error
+    if (selectedCheckboxPresent){
+        errorMessages[3].style.display = "none";
+    } else {
+        errorFound = true;
+        errorMessages[3].style.display = "block";
     }
 
+    // if payment drop down has cc selected, start credit card input validation
     if (eventChangeValue === "credit card"){
+        // get cc input DOM elements
         const ccNum = document.getElementById("cc-num").value;
         const zipCode = document.getElementById("zip").value;
         const cvv = document.getElementById("cvv").value;
         const ccNumInput = document.getElementById("cc-num");
         const zipCodeInput = document.getElementById("zip");
-        const cvvInput = document.getElementById("cvv");
+        const cvvInput = document.getElementById("cvv"); 
 
+        // check for valid cc number input
         if (ccNum.length >= 13 && ccNum.length <= 16 && !isNaN(Number(ccNum))) {
             document.getElementById("invalid-cc-num").style.display = "none";
             ccNumInput.style.border = "none";
@@ -135,6 +154,7 @@ function validateForm() {
             ccNumInput.style.border = "thick solid #FF0000";
         }
 
+        // check for valid zip code input
         if (zipCode.length === 5 && !isNaN(Number(zipCode))) {
             document.getElementById("invalid-zip").style.display = "none";
             zipCodeInput.style.border = "none";
@@ -144,6 +164,7 @@ function validateForm() {
             zipCodeInput.style.border = "thick solid #FF0000";
         }
 
+        // check for valid cvv input
         if (cvv.length === 3 && !isNaN(Number(cvv))) {
             document.getElementById("invalid-cvv").style.display = "none";
             cvvInput.style.border = "none";
@@ -153,22 +174,26 @@ function validateForm() {
             cvvInput.style.border = "thick solid #FF0000";
         }
 
-    } else {
-        document.getElementById("invalid-cc-num").style.display = "none";
-        document.getElementById("invalid-zip").style.display = "none";
-        document.getElementById("invalid-cvv").style.display = "none";
-    }
+        } else {
+            // hide cc input validation error messages
+            document.getElementById("invalid-cc-num").style.display = "none";
+            document.getElementById("invalid-zip").style.display = "none";
+            document.getElementById("invalid-cvv").style.display = "none";
+        }
 
-    if (errorFound) {
-        submitButton.disabled = true;
-        submitButton.style.background = "#6F9DDC";
-    } else {
-        submitButton.disabled = false;
-        submitButton.style.background = "#083f57";
-    }
+        // if any errors found, disable and restyle the submit button so it is obvious that it cannot be clicked until errors are fixed
+        if (errorFound) {
+            submitButton.disabled = true;
+            submitButton.style.background = "#6F9DDC";
+        } else {
+            submitButton.disabled = false;
+            submitButton.style.background = "#083f57";
+        }
 }
 
+
 function checkForSelectedCheckbox() {
+    // loops through all checkbox elements, if at least one is checked, returns true, otherwise, it returns false
     for (let i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i].checked === true) {
             return true;
@@ -178,6 +203,7 @@ function checkForSelectedCheckbox() {
 }
 
 function addKeyupListeners(keyupFields) {
+    // loops through a list of input fields, and creates a keyup listener for each that calls the validateForm() function
     for (let i = 0; i < keyupFields.length; i++) {
         document.getElementById(keyupFields[i]).addEventListener("keyup", () => {
             validateForm();
@@ -185,20 +211,28 @@ function addKeyupListeners(keyupFields) {
     }
 }
 
+//creates global variables for use in various functions
 const checkboxes = document.querySelectorAll("#activities input");
 const keyupFields = ["name", "mail", "cc-num", "zip", "cvv"];
 let total = 0;
 
+
+// hides certain elements on initial page load
 document.getElementById("paypal").style.display = "none";
 document.getElementById("bitcoin").style.display = "none";
 document.getElementById("shirt-colors").style.display = "none";
+document.getElementById("invalid-email-err").style.display = "none";
 
 showHideOtherTitle(); // hide the other job role field on page load
 processThemeChange(); // hide colors on 
-addKeyupListeners(keyupFields); // validates form on page load
+
+// validates form on page load
+addKeyupListeners(keyupFields); 
 validateForm();
 
+// handler when an activity checkbox is changed
 document.getElementById("activities").addEventListener("change", (event) => {
+    // pulls relevant clicked checkbox data
     const clickedEventTime  = event.target.getAttribute("data-day-and-time");
     const clickedEventName  = event.target.getAttribute("name");
     const clickEventPrice   = Number(event.target.getAttribute("data-cost"));
@@ -206,33 +240,45 @@ document.getElementById("activities").addEventListener("change", (event) => {
 
     validateForm();
     
+    // updates the total depending on whether checkbox was selected or de-selected
     if (clickEventChecked) {
         total += clickEventPrice;
     } else {
         total -= clickEventPrice;
     }
 
+    // updates HTML displaying total to user
     updateTotal(total);
 
+    // loops through all checkboxes to check if there are any schedules conflicts with the selected session
     for (let i = 0; i < checkboxes.length; i++) {
+        // gets schedule/name information from the current checkbox, as well as its label
         const currentCheckbox = checkboxes[i];
         const currentCheckboxTime = currentCheckbox.getAttribute("data-day-and-time");
         const currentCheckboxName = currentCheckbox.getAttribute("name");
         const currentCheckboxLabel = currentCheckbox.parentElement;
 
+        // if no time is assigned to the checkbox element, move on to the next one
         if (currentCheckboxTime === "null" ) {
             continue;
         }
 
+        // if the time of the current checkbox matches the time of the clicked checkbox, continue checking
         if (clickedEventTime === currentCheckboxTime) {
+            // if the current checkbox is the same as the one just clicked, move on to the next one
             if (clickedEventName === currentCheckboxName) {
                 continue;
-            } else {
+            } else { // otherwise, it is a different activity at the same time (in other words, a conflicting session)
+
+                // if we just selected an event, then the current checkbox is a conflict
+
                 if (clickEventChecked) {
-                    disableCheckBox(currentCheckbox);
+                    // disable the checkbox, and style it so it is clearly disabled
+                    disableCheckBox(currentCheckbox); 
                     currentCheckboxLabel.style.color = "red";
                     currentCheckboxLabel.style.textDecoration = "line-through";   
                 }else {
+                    // if we are deselecting the event, then we have to reenable the conflicting session checkbox and remove the disabled styling
                     enableCheckBox(currentCheckbox);
                     console.log(currentCheckboxLabel);
                     currentCheckboxLabel.style.color = "black";  
@@ -244,12 +290,15 @@ document.getElementById("activities").addEventListener("change", (event) => {
     }    
 });
 
+// adds a listener if the payment drop down changes.
 document.getElementById("payment").addEventListener("change", (event) => {
+    // gets new payment method value and defines all possible payment method values
     const eventChangeValue = event.target.value;
     const paymentMethods = ["credit card", "paypal", "bitcoin"];
 
     validateForm();
 
+    // loops through each defined payment method value, if the selected value matches, display that div, hide the others
     for (let i = 0; i < paymentMethods.length; i++) {
         if (eventChangeValue === paymentMethods[i]) {
             document.getElementById(paymentMethods[i]).style.display = "block";
